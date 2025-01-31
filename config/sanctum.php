@@ -4,6 +4,9 @@ use Laravel\Sanctum\Sanctum;
 
 return [
 
+    'database_connection' => env('DB_CONNECTION', 'mongodb'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Stateful Domains

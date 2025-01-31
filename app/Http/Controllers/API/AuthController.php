@@ -31,6 +31,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Login Successful',
+            'role' => $user->role,
             'token_type' => 'Bearer',
             'token' => $token,
         ], 200);
@@ -43,12 +44,16 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|max:255',
+            
         ]);
+
+        $role = $request->role ?? 'user'; // Default role is 'user'
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $role,
         ]);
 
         if ($user) 
@@ -57,6 +62,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'message' => 'Registration Successful',
+                'role' => $user->role,
                 'token_type' => 'Bearer',
                 'token' => $token,
             ], 201);
@@ -71,21 +77,14 @@ class AuthController extends Controller
 
     public function logout (Request $request) : JsonResponse
     {
-        $user = User::where('id', $request->user()->id)->first();
-        if ($user) 
-        {
-            $user->tokens()->delete();
-            return response()->json([
-                'message' => 'Logout Successful',
-            ], 200);
-        } 
-        else 
-        {
-            return response()->json([
-                'message' => 'User Not Found',
-            ], 500);
-        }
-    }   
+        
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Logout Successful',
+        ], 200);
+    }
+       
 
     public function profile (Request $request) : JsonResponse
     {
@@ -100,7 +99,8 @@ class AuthController extends Controller
         {
             return response()->json([
                 'message' => 'Not Authenticated',
-            ], 401);
-        }
+            ], 401);}
+
+
     }
 }

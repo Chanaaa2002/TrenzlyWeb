@@ -54,4 +54,5 @@
             </a>
         </p>
     </div>
+    
 </x-guest-layout>

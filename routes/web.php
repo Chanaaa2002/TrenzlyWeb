@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Middleware\RoleMiddleware;
 
 //Page Routes
 Route::get('/', [PageController::class, 'index'])->name('welcome');
@@ -11,6 +12,16 @@ Route::get('/womens', [PageController::class, 'womens'])->name('pages.womens');
 Route::get('/acce', [PageController::class, 'acce'])->name('pages.acce');
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 
+
+// User Routes
+Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () {
+    Route::get('/user/dashboard', [PageController::class, 'userDashboard'])->name('user.dashboard');
+});
+
+// Admin Routes
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
+    Route::get('/admin/dashboard', [PageController::class, 'adminDashboard'])->name('admin.dashboard');
+});
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

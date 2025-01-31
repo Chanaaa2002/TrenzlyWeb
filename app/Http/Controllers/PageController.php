@@ -30,5 +30,15 @@ class PageController extends Controller
     {
         return view('pages.about');
     }
+
+    public function userDashboard()
+    {
+        return view('user.dashboard'); // Ensure this view exists
+    }
+
+    public function adminDashboard()
+    {
+        return view('admin.dashboard'); // Ensure this view exists in resources/views/admin
+    }
 }
 

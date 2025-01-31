@@ -30,7 +30,7 @@
     <!-- Page Contents -->
     <div class="page-content pt-[87px]">
         @yield('pages')
-        @livewireScripts
+        {{-- @livewireScripts --}}
     </div>
 
     @include('layouts.footer')
