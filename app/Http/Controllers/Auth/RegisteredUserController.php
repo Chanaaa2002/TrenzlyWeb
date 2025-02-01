@@ -10,11 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use App\Http\Controllers\API\AuthController;
 
 class RegisteredUserController extends Controller
 {
@@ -27,36 +24,40 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Handle an incoming registration request using Sanctum API.
+     * Handle an incoming registration request.
      */
-    public function store(Request $request)
-{
-    Log::info('Register method called'); // Add this log
+    public function store(Request $request): RedirectResponse
+    {
+        Log::info('User Registration Attempt');
 
-    $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-        'password' => ['required', 'confirmed', 'min:8'],
-    ]);
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => 'user', // Default role
-    ]);
+        // Create new user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'user', // Default role
+        ]);
 
-    Log::info('User registered: ' . $user->email); // Add this log
+        // Trigger Laravel's Registered event
+        event(new Registered($user));
 
-    $token = $user->createToken($user->email . 'Auth-Token')->plainTextToken;
+        // Log the user in after successful registration
+        Auth::login($user);
+        $request->session()->regenerate();
 
-    session(['auth-token' => $token]);
-    session(['role' => $user->role]);
+        Log::info('User Registered and Logged In Successfully', ['email' => $user->email, 'role' => $user->role]);
 
-    if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    } else {
+        // Redirect based on user role
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         return redirect()->route('user.dashboard');
     }
-}
 }
