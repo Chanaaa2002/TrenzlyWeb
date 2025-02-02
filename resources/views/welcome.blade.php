@@ -48,6 +48,56 @@
   </section>
 
 
+  <section class="category-section">
+    <div class="category-grid">
+        
+        <div class="category-item large-item">
+            <img src="{{ asset('images/dress.jpg') }}" alt="Organic Raw">
+            <div class="category-overlay">
+                <h3>ELEGANT DRESSES</h3>
+                <p>Handmade</p>
+            </div>
+        </div>
+        
+       
+        <div class="category-item">
+            <img src="{{ asset('images/formal.jpg') }}" alt="Category 2">
+            <div class="category-overlay">
+                <h3>FORMAL WEAR</h3>
+                <p>Handmade</p>
+            </div>
+        </div>
+
+        
+        <div class="category-item">
+            <img src="{{ asset('images/casual.jpg') }}" alt="Category 3">
+            <div class="category-overlay">
+                <h3>CASUAL WEAR</h3>
+                <p>Handmade</p>
+            </div>
+        </div>
+
+        
+        <div class="category-item">
+            <img src="{{ asset('images/bikini.jpg') }}" alt="Category 4">
+            <div class="category-overlay">
+                <h3>BIKINI WEAR</h3>
+                <p>Handmade</p>
+            </div>
+        </div>
+
+       
+        <div class="category-item">
+            <img src="{{ asset('images/beach.jpg') }}" alt="Category 5">
+            <div class="category-overlay">
+                <h3>BEACH WEAR</h3>
+                <p>Handmade</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
 
 
@@ -82,7 +132,7 @@
 
       <!-- Third Item -->
       <div class="relative group">
-        <img src="{{ asset('images/hero-2.png') }}" alt="Jackets" class="object-cover w-full h-auto transition-transform duration-500 transform group-hover:scale-105">
+        <img src="{{ asset('images/hero-2.jpg') }}" alt="Jackets" class="object-cover w-full duration-500 transform h-95 tran3sition-transform group-hover:scale-105">
         <div class="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-500 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
           <p class="text-2xl font-semibold text-white">WOMEN'S WEAR</p>
           <p class="text-4xl font-bold text-white">Sale 20% off</p>

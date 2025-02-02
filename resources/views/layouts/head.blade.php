@@ -17,6 +17,7 @@
 'resources/css/app.css',
 'resources/js/app.js',
 'resources/js/welcome.js',
+'resources/css/category.css',
 
 
 ])

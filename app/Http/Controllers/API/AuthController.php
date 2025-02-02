@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use MongoDB\Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Log;
 
 
 class AuthController extends Controller
@@ -17,7 +18,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|max:255|confirmed',
+            'password' => 'required|string|min:8|max:255',
         ]);
 
         $user = User::create([
@@ -31,6 +32,7 @@ class AuthController extends Controller
         if ($user) 
         {
             $token = $user->createToken($user->email.'Auth-Token')->plainTextToken;
+            Log::info('Token Created', ['token' => $token]);
 
             return response()->json([
                 'message' => 'Registration Successful',
@@ -63,7 +65,7 @@ class AuthController extends Controller
         }
 
         // Remove old tokens and create a new one
-        $user->tokens()->delete();
+        //$user->tokens()->delete();
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([

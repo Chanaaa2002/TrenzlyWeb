@@ -47,17 +47,29 @@ class RegisteredUserController extends Controller
         // Trigger Laravel's Registered event
         event(new Registered($user));
 
-        // Log the user in after successful registration
+        // Automatically log the user in
         Auth::login($user);
-        $request->session()->regenerate();
 
         Log::info('User Registered and Logged In Successfully', ['email' => $user->email, 'role' => $user->role]);
+
+        // Generate token for non-admin users
+        if ($user->role !== 'admin') {
+            $token = $user->createToken($user->email . 'Auth-Token')->plainTextToken;
+
+            Log::info('Token Created for User', ['token' => $token]);
+
+            // Store token in session for usage in web requests
+            session(['auth-token' => $token]);
+        }
 
         // Redirect based on user role
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
 
-        return redirect()->route('user.dashboard');
+        return redirect()->route('user.dashboard')->with([
+            'status' => true,
+            'message' => 'User registered successfully',
+        ]);
     }
 }

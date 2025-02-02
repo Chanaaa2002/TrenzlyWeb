@@ -18,12 +18,17 @@ Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 
 
 
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
+// Authenticated Routes
+// Route::middleware('auth')->group(function () {
+//     Route::get('/user/dashboard', [PageController::class, 'userDashboard'])->name('user.dashboard');
+//     Route::get('/admin/dashboard', [PageController::class, 'adminDashboard'])->middleware('role:admin')->name('admin.dashboard');
+// });
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     Route::get('/admin/dashboard', [PageController::class, 'adminDashboard'])->name('admin.dashboard');
