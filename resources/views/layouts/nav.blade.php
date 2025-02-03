@@ -12,7 +12,7 @@
             <li><a href="{{ route('welcome') }}">Home</a></li>
             <li><a href="{{ route('pages.mens') }}">MEN'S</a></li>
             <li><a href="{{ route('pages.womens') }}">WOMEN'S</a></li>
-            <li><a href="{{ route('pages.acce') }}">ACCESORIES </a></li>
+            <li><a href="{{ route('pages.acce') }}">ACCESSORIES </a></li>
             <li><a href="{{ route('pages.about') }}">About</a></li>
         </ul>
     </nav>

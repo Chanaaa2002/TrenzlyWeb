@@ -41,6 +41,7 @@ return [
             'database' => env('DB_AUTH_DATABASE', 'admin'), // Enables SSL for secure connections
         ],
     ],
+    'default' => env('DB_CONNECTION', 'mongodb'),
 
         'sqlite' => [
             'driver' => 'sqlite',

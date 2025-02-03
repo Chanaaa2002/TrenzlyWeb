@@ -18,6 +18,7 @@
 'resources/js/app.js',
 'resources/js/welcome.js',
 'resources/css/category.css',
+'resources/css/product_list.css',
 
 
 ])

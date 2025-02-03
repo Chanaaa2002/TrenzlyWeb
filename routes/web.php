@@ -6,6 +6,10 @@ use App\Http\Controllers\PageController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\CategoryController;
+//use App\Http\Controllers\Admin\CategoryController;
+
 
 //Page Routes
 Route::get('/', [PageController::class, 'index'])->name('welcome');
@@ -32,7 +36,25 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 
 Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     Route::get('/admin/dashboard', [PageController::class, 'adminDashboard'])->name('admin.dashboard');
+    Route::get('/admin/products', [ProductController::class, 'index'])->name('admin.products.index');
+    Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/admin/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+
+    
+   
 });
+    
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
+    Route::get('/admin/dashboard', [PageController::class, 'adminDashboard'])->name('admin.dashboard');
+    
+    // Categories Routes
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+});
+
 
 // User Routes (Only Authenticated Users)
 Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () {
