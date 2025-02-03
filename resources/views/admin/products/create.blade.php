@@ -28,10 +28,14 @@
 
             <!-- Category -->
             <label class="block mb-1 text-sm font-medium text-gray-700">Category</label>
-            <select name="category_id" id="productCategory" required class="w-full p-2 mb-3 text-gray-800 border rounded-md focus:ring focus:ring-blue-300 focus:outline-none">
+            <select name="category_id" id="productCategory" required 
+                    class="w-full p-2 mb-3 text-gray-800 border rounded-md focus:ring focus:ring-blue-300 focus:outline-none">
                 <option value="" disabled selected>Select a Category</option>
-                <!-- Dynamic Categories -->
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
             </select>
+            
 
             <!-- Size and Color -->
             <div class="flex gap-3 mb-3">

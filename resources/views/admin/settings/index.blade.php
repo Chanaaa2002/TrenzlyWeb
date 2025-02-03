@@ -157,85 +157,18 @@
     @csrf
 </form>
 
+<div class="dashboard-content fade-in">
+    <h2 class="text-3xl font-bold text-gray-900">Settings</h2>
 
+    <form method="POST" action="{{ route('admin.settings.update') }}">
+        @csrf
+        <label class="block mb-2 text-sm font-medium text-gray-800">Site Title</label>
+        <input type="text" name="site_title" class="w-full p-2 mb-4 border rounded-md" placeholder="Enter site title">
 
+        <label class="block mb-2 text-sm font-medium text-gray-800">Admin Email</label>
+        <input type="email" name="admin_email" class="w-full p-2 mb-4 border rounded-md" placeholder="Enter admin email">
 
-<main class="flex-1 p-6 bg-gray-100">
-    <div class="content">
-        <h2 class="mb-6 text-3xl font-bold text-gray-800">Category Management</h2>
-        <a href="#" onclick="openModal()" class="add-btn">+ Add Category</a>
-        <table>
-            <thead>
-                <tr>
-                    
-                    <th>Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($categories as $category)
-                    <tr>
-                        
-                        <td>{{ $category->name }}</td>
-                        <td>
-                            <button class="action-btn edit-btn" onclick="editCategory({{ $category }})">Edit</button>
-                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="action-btn delete-btn">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<
-
-@include('admin.categories.create')
-
-<script>
-    function openModal() {
-        document.getElementById('addCategoryModal').classList.remove('hidden');
-        document.getElementById('modalTitle').innerText = "Add New Category";
-        document.getElementById('saveButton').innerText = "Save Category";
-        document.getElementById('methodField').value = "POST";
-        document.getElementById('categoryForm').action = "{{ route('admin.categories.store') }}";
-    }
-
-    function closeModal() {
-        document.getElementById('addCategoryModal').classList.add('hidden');
-        document.getElementById('categoryForm').reset();
-    }
-
-    function editCategory(category) {
-        openModal();
-        document.getElementById('modalTitle').innerText = "Edit Category";
-        document.getElementById('saveButton').innerText = "Update Category";
-        document.getElementById('methodField').value = "PUT";
-        document.getElementById('categoryForm').action = "/admin/categories/" + category.id;
-        document.getElementById('categoryName').value = category.name;
-    }
-</script>
-
+        <button class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-700">Save Settings</button>
+    </form>
+</div>
 @endsection

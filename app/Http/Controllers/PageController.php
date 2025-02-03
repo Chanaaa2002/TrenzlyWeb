@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class PageController extends Controller
 {
@@ -11,15 +12,16 @@ class PageController extends Controller
         return view('welcome');
     }
 
-    public function mens()
-    {
-        return view('pages.mens');
-    }
+    public function shop()
+{
+    $products = Product::with('category')->get();
+    return view('shop', compact('products'));
+}
 
-    public function womens()
-    {
-        return view('pages.womens');
-    }
+    // public function womens()
+    // {
+    //     return view('pages.womens');
+    // }
 
     public function acce()
     {

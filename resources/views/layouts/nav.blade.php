@@ -10,9 +10,9 @@
     <nav class="main-menu" id="main-menu">
         <ul>
             <li><a href="{{ route('welcome') }}">Home</a></li>
-            <li><a href="{{ route('pages.mens') }}">MEN'S</a></li>
-            <li><a href="{{ route('pages.womens') }}">WOMEN'S</a></li>
-            <li><a href="{{ route('pages.acce') }}">ACCESSORIES </a></li>
+            <li><a href="{{ route('pages.shop') }}">SHOP</a></li>
+            {{-- <li><a href="{{ route('pages.womens') }}">WOMEN'S</a></li>
+            <li><a href="{{ route('pages.acce') }}">ACCESSORIES </a></li> --}}
             <li><a href="{{ route('pages.about') }}">About</a></li>
         </ul>
     </nav>

@@ -105,7 +105,7 @@
         <i class="fa-solid fa-box"></i> Products
     </div>
     
-    {{-- <div class="sidebar-item" onclick="window.location='{{ route('admin.orders.index') }}'">
+    <div class="sidebar-item" onclick="window.location='{{ route('admin.orders.index') }}'">
         <i class="fa-solid fa-shopping-cart"></i> Orders
     </div>
 
@@ -113,9 +113,9 @@
         <i class="fa-solid fa-users"></i> Users
     </div>
 
-    <div class="sidebar-item" onclick="window.location='{{ route('admin.settings') }}'">
+    <div class="sidebar-item" onclick="window.location='{{ route('admin.settings.index') }}'">
         <i class="fa-solid fa-cog"></i> Settings
-    </div> --}}
+    </div>
 
     <div class="sidebar-item" onclick="document.getElementById('logoutForm').submit();">
         <i class="fa-solid fa-sign-out-alt"></i> Logout

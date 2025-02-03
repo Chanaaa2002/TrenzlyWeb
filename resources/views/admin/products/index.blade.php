@@ -3,11 +3,19 @@
 @section('pages')
 
 <style>
+
+    :root {
+        --primary-color: #365772; /* Deep Orange */
+        --secondary-color: #1E293B; /* Dark Blue */
+        --highlight-color: #FF9800; /* Bright Orange */
+        --bg-color: #FAFAFA; /* Light Gray */
+        --text-color: #374151; /* Gray */
+    }
     /* Sidebar styling */
     .sidebar {
         width: 240px;
         height: 100vh;
-        background: #1E293B; /* Dark blue */
+        background: var(--primary-color); /* Dark blue */
         color: white;
         position: absolute;
         top: 0;
@@ -140,7 +148,7 @@ table tbody tr:hover {
             <i class="fa-solid fa-box"></i> Products
         </div>
         
-        {{-- <div class="sidebar-item" onclick="window.location='{{ route('admin.orders.index') }}'">
+        <div class="sidebar-item" onclick="window.location='{{ route('admin.orders.index') }}'">
             <i class="fa-solid fa-shopping-cart"></i> Orders
         </div>
     
@@ -148,9 +156,9 @@ table tbody tr:hover {
             <i class="fa-solid fa-users"></i> Users
         </div>
     
-        <div class="sidebar-item" onclick="window.location='{{ route('admin.settings') }}'">
+        <div class="sidebar-item" onclick="window.location='{{ route('admin.settings.index') }}'">
             <i class="fa-solid fa-cog"></i> Settings
-        </div> --}}
+        </div>
     
         <div class="sidebar-item" onclick="document.getElementById('logoutForm').submit();">
             <i class="fa-solid fa-sign-out-alt"></i> Logout
@@ -191,10 +199,15 @@ table tbody tr:hover {
                     @foreach ($products as $product)
                         <tr class="border-b hover:bg-gray-100">
                             <td class="px-6 py-3">
-                                <img src="{{ asset('storage/' . json_decode($product->images)[0]) }}" 
-                                     alt="Product Image" 
-                                     class="object-cover w-16 h-16 rounded-lg">
+                                @if (!empty($product->images) && is_array(json_decode($product->images, true)))
+                                    <img src="{{ asset('storage/' . json_decode($product->images, true)[0]) }}" 
+                                         alt="Product Image" 
+                                         class="object-cover w-16 h-16 rounded-lg">
+                                @else
+                                    <span>No Image</span>
+                                @endif
                             </td>
+                            
                             <td class="px-6 py-3">{{ $product->name }}</td>
                             <td class="px-6 py-3">{{ $product->category->name }}</td>
                             <td class="px-6 py-3">${{ $product->price }}</td>
@@ -202,8 +215,8 @@ table tbody tr:hover {
                             <td class="px-6 py-3">{{ $product->color }}</td>
                             <td class="px-6 py-3">{{ $product->stock }}</td>
                             <td class="flex gap-2 px-6 py-3">
-                                <button onclick="editProduct({{ $product->id }})" 
-                                        class="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
+                                <button onclick="editProduct({{ json_encode($product) }})" 
+                                     class="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
                                     Edit
                                 </button>
                                 <form method="POST" action="{{ route('admin.products.destroy', $product) }}">

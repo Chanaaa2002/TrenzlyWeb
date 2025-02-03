@@ -8,13 +8,18 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\CartController;
 //use App\Http\Controllers\Admin\CategoryController;
 
 
 //Page Routes
 Route::get('/', [PageController::class, 'index'])->name('welcome');
-Route::get('/mens', [PageController::class, 'mens'])->name('pages.mens');
-Route::get('/womens', [PageController::class, 'womens'])->name('pages.womens');
+Route::get('/shop', [PageController::class, 'shop'])->name('pages.shop');
+
+//Route::get('/womens', [PageController::class, 'womens'])->name('pages.womens');
 Route::get('/acce', [PageController::class, 'acce'])->name('pages.acce');
 Route::get('/about', [PageController::class, 'about'])->name('pages.about');
 
@@ -53,7 +58,23 @@ Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function ()
     Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
     Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+
+    // Orders
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::post('/admin/orders', [OrderController::class, 'store'])->name('admin.orders.store');
+    Route::put('/admin/orders/{order}', [OrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('/admin/orders/{order}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::put('/admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+    // Settings
+    Route::get('/admin/settings', [SettingsController::class, 'index'])->name('admin.settings.index');
+    Route::post('/admin/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
 });
+
+
 
 
 // User Routes (Only Authenticated Users)
@@ -61,6 +82,16 @@ Route::middleware(['auth', RoleMiddleware::class . ':user'])->group(function () 
     Route::get('/user/dashboard', [PageController::class, 'userDashboard'])->name('user.dashboard');
 });
 
+Route::get('/shop', [ProductController::class, 'showProducts'])->name('pages.shop');
+Route::get('/product-display/{id}', [ProductController::class, 'show'])->name('pages.product-display');
+Route::get('/product-info/{id}', [ProductController::class, 'show'])->name('pages.product-info');
+
+
+
+Route::get('/cart', [CartController::class, 'index'])->name('pages.cart');
+Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::put('/cart/update-all', [CartController::class, 'updateAll'])->name('cart.updateAll');
+Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
