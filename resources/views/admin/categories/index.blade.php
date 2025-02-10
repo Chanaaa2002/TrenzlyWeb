@@ -169,7 +169,7 @@
                 <tr>
                     
                     <th>Name</th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

@@ -88,10 +88,19 @@ Route::get('/product-info/{id}', [ProductController::class, 'show'])->name('page
 
 
 
-Route::get('/cart', [CartController::class, 'index'])->name('pages.cart');
-Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::put('/cart/update-all', [CartController::class, 'updateAll'])->name('cart.updateAll');
-Route::delete('/cart/remove/{productId}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+
+Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/cart/add/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.view');
+    Route::post('/cart/update/{id}', [CartController::class, 'updateCart'])->name('cart.update');
+    Route::get('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+});
+
+
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

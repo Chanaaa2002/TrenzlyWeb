@@ -2,8 +2,12 @@
 
 <div class="product-display-container">
     <div class="product-image-container">
-        @if (!empty($product->images) && is_array(json_decode($product->images, true)))
-            <img src="{{ asset('storage/' . json_decode($product->images, true)[0]) }}" alt="{{ $product->name }}">
+        @php
+            // Ensure $product->images is always treated as an array
+            $images = is_string($product->images) ? json_decode($product->images, true) : $product->images;
+        @endphp
+        @if (!empty($images) && is_array($images))
+            <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $product->name }}">
         @else
             <img src="{{ asset('images/no-image.png') }}" alt="No Image Available">
         @endif
@@ -18,15 +22,32 @@
             @csrf
             <div class="quantity-and-cart">
                 <label for="size" class="block mb-1 text-sm font-medium text-gray-700">Size:</label>
-                <input type="text" name="size" id="size" value="{{ $product->size }}" readonly
+                <select name="size" id="size" required
                     class="w-full p-2 mb-3 text-gray-800 border rounded-md focus:ring focus:ring-blue-300 focus:outline-none">
+                    @if (is_array($product->size))
+                        @foreach ($product->size as $sizeOption)
+                            <option value="{{ $sizeOption }}">{{ $sizeOption }}</option>
+                        @endforeach
+                    @else
+                        <option value="{{ $product->size }}">{{ $product->size }}</option>
+                    @endif
+                </select>
 
                 <label for="color" class="block mb-1 text-sm font-medium text-gray-700">Color:</label>
-                <input type="text" name="color" id="color" value="{{ $product->color }}" readonly
+                <select name="color" id="color" required
                     class="w-full p-2 mb-3 text-gray-800 border rounded-md focus:ring focus:ring-blue-300 focus:outline-none">
+                    @if (is_array($product->color))
+                        @foreach ($product->color as $colorOption)
+                            <option value="{{ $colorOption }}">{{ ucfirst($colorOption) }}</option>
+                        @endforeach
+                    @else
+                        <option value="{{ $product->color }}">{{ ucfirst($product->color) }}</option>
+                    @endif
+                </select>
 
                 <label for="quantity" class="block mb-1 text-sm font-medium text-gray-700">Quantity:</label>
-                <input type="number" name="quantity" min="1" max="10" value="1" class="product-quantity">
+                <input type="number" name="quantity" min="1" max="10" value="1" required
+                    class="w-full p-2 mb-3 text-gray-800 border rounded-md focus:ring focus:ring-blue-300 focus:outline-none">
 
                 <button type="submit" class="px-4 py-2 mt-3 text-white bg-blue-500 rounded-md add-to-cart-btn hover:bg-blue-700">
                     Add to Cart
@@ -36,11 +57,12 @@
 
         <ul class="mt-4 product-meta">
             <li><strong>SKU:</strong> {{ $product->id }}</li>
-            <li><strong>Category:</strong> {{ $product->category->name }}</li>
-            <li><strong>Tags:</strong> Crafts, Pottery, Homemade</li>
+            <li><strong>Category:</strong> {{ $product->category->name ?? 'Uncategorized' }}</li>
+            {{-- <li><strong>Tags:</strong> </li> --}}
         </ul>
     </div>
 </div>
+
 
 <style>
     .product-display-container {

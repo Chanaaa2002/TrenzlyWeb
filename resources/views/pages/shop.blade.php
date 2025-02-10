@@ -36,11 +36,11 @@
         <div class="categories-section">
             <h3 class="section-title">Categories</h3>
             <ul class="categories-list">
-                <li><a href="#" class="shop-category-item">Mask (10)</a></li>
+                {{-- <li><a href="#" class="shop-category-item">Mask (10)</a></li>
                 <li><a href="#" class="shop-category-item">Jewelry (6)</a></li>
                 <li><a href="#" class="shop-category-item">Batik & Silk (11)</a></li>
                 <li><a href="#" class="shop-category-item">Paintings (12)</a></li>
-                <li><a href="#" class="shop-category-item">Pottery (30)</a></li>
+                <li><a href="#" class="shop-category-item">Pottery (30)</a></li> --}}
 
             </ul>
         </div>

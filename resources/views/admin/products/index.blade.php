@@ -192,34 +192,44 @@ table tbody tr:hover {
                         <th class="px-6 py-3 text-left">Size</th>
                         <th class="px-6 py-3 text-left">Color</th>
                         <th class="px-6 py-3 text-left">Stock</th>
-                        <th class="px-6 py-3 text-left">Actions</th>
+                        <th class="px-6 py-3 text-left"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($products as $product)
                         <tr class="border-b hover:bg-gray-100">
                             <td class="px-6 py-3">
-                                @if (!empty($product->images) && is_array(json_decode($product->images, true)))
-                                    <img src="{{ asset('storage/' . json_decode($product->images, true)[0]) }}" 
+                                @if (!empty($product->images) && is_array($product->images))
+                                    <img src="{{ asset('storage/' . $product->images[0]) }}" 
                                          alt="Product Image" 
                                          class="object-cover w-16 h-16 rounded-lg">
                                 @else
                                     <span>No Image</span>
                                 @endif
                             </td>
-                            
                             <td class="px-6 py-3">{{ $product->name }}</td>
                             <td class="px-6 py-3">{{ $product->category->name }}</td>
-                            <td class="px-6 py-3">${{ $product->price }}</td>
-                            <td class="px-6 py-3">{{ $product->size }}</td>
-                            <td class="px-6 py-3">{{ $product->color }}</td>
+                            <td class="px-6 py-3">Rs. {{ $product->price }}</td>
+                            <td class="px-6 py-3">
+                                @foreach ($product->size as $size)
+                                    <span class="w-8 h-8 border rounded">{{$size}}</span>
+                                @endforeach
+                            </td>
+                            <td class="flex items-center gap-2 px-6 py-3">
+                                @foreach ($product->color as $color)
+                                    <span class="w-8 h-8 border rounded" style="background-color: {{ $color }}"></span>
+                                @endforeach
+                            </td>
                             <td class="px-6 py-3">{{ $product->stock }}</td>
                             <td class="flex gap-2 px-6 py-3">
-                                <button onclick="editProduct({{ json_encode($product) }})" 
-                                     class="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
+                                <!-- Edit Button -->
+                                <button onclick="editProduct({{$product->id}})" 
+                                    class="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600">
                                     Edit
                                 </button>
-                                <form method="POST" action="{{ route('admin.products.destroy', $product) }}">
+                                
+                                <!-- Delete Form -->
+                                <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button class="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
@@ -227,6 +237,7 @@ table tbody tr:hover {
                                     </button>
                                 </form>
                             </td>
+                            
                         </tr>
                     @endforeach
                 </tbody>
@@ -246,7 +257,7 @@ table tbody tr:hover {
         document.getElementById('modalTitle').innerText = "Add New Product";
         document.getElementById('saveButton').innerText = "Save Product";
         document.getElementById('methodField').value = "POST";
-        document.getElementById('productForm').action = "{{ route('admin.products.store') }}";
+        document.getElementById('productForm').action = {{ route('admin.products.store') }};
     }
 
     function closeModal() {
@@ -255,33 +266,50 @@ table tbody tr:hover {
         document.getElementById('productId').value = "";
     }
 
-    function editProduct(product) {
-        openModal();
+    function editProduct(id) {
+    fetch(`/admin/products/${id}/edit`)
+        .then(response => response.json())
+        .then(product => {
+            openModal();
 
-        document.getElementById('modalTitle').innerText = "Edit Product";
-        document.getElementById('saveButton').innerText = "Update Product";
-        document.getElementById('methodField').value = "PUT";
-        document.getElementById('productForm').action = "/admin/products/" + product.id;
+            document.getElementById('modalTitle').innerText = "Edit Product";
+            document.getElementById('saveButton').innerText = "Update Product";
+            document.getElementById('methodField').value = "PUT";
+            document.getElementById('productForm').action = `/admin/products/${id}`;
 
-        document.getElementById('productId').value = product.id;
-        document.getElementById('productName').value = product.name;
-        document.getElementById('productDescription').value = product.description;
-        document.getElementById('productPrice').value = product.price;
-        document.getElementById('productStock').value = product.stock;
-        document.getElementById('productSize').value = product.size;
-        document.getElementById('productColor').value = product.color;
-        document.getElementById('productCategory').value = product.category_id;
+            // Populate the form with product data
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productSize').value = product.size.join(','); // Assuming size is an array
+            document.getElementById('productColor').value = product.color.join(','); // Assuming color is an array
+            document.getElementById('productCategory').value = product.category_id;
 
-        document.getElementById('imagePreview').innerHTML = "";
-        if (product.images) {
-            let images = JSON.parse(product.images);
-            images.forEach(img => {
-                let imgElement = document.createElement("img");
-                imgElement.src = "/storage/" + img;
-                imgElement.classList.add("w-24", "h-24", "object-cover", "rounded-lg");
-                document.getElementById('imagePreview').appendChild(imgElement);
-            });
-        }
+            const imagePreview = document.getElementById('imagePreview');
+            imagePreview.innerHTML = ""; // Clear existing previews
+            if (product.images) {
+                JSON.parse(product.images).forEach(img => {
+                    const imgElement = document.createElement("img");
+                    imgElement.src = `/storage/${img}`;
+                    imgElement.classList.add("w-24", "h-24", "object-cover", "rounded-lg");
+                    imagePreview.appendChild(imgElement);
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching product data:', error));
+}
+
+
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview.innerHTML = "";
+    if (product.images) {
+        JSON.parse(product.images).forEach(img => {
+            const imgElement = document.createElement("img");
+            imgElement.src = `/storage/${img}`;
+            imgElement.classList.add("w-24", "h-24", "object-cover", "rounded-lg");
+            imagePreview.appendChild(imgElement);
+        });
     }
 </script>
 

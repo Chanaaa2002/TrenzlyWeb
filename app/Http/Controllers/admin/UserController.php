@@ -20,10 +20,19 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User updated successfully.');
     }
 
-    public function destroy(User $user)
-    {
-        $user->delete();
-        return redirect()->back()->with('success', 'User deleted successfully.');
-    }
+   
+
+    public function destroy($id)
+{
+    // Find the user by ID
+    $user = User::findOrFail($id);
+
+    // Delete the user
+    $user->delete();
+
+    // Redirect with success message
+    return redirect()->route('admin.users.index')->with('success', 'User deleted successfully.');
+}
+
 }
 ?>
